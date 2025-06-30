@@ -60,7 +60,7 @@ fn bitand_neg_pos(a: &mut Vec<BigDigit>, b: &[BigDigit]) {
         Equal => {}
         Less => {
             let extra = &b[a.len()..];
-            a.extend(extra.iter().cloned());
+            a.extend(extra.iter().copied());
         }
     }
 }
@@ -82,7 +82,7 @@ fn bitand_neg_neg(a: &mut Vec<BigDigit>, b: &[BigDigit]) {
     debug_assert!(b.len() > a.len() || carry_b == 0);
     match Ord::cmp(&a.len(), &b.len()) {
         Greater => {
-            for ai in a[b.len()..].iter_mut() {
+            for ai in &mut a[b.len()..] {
                 let twos_a = negate_carry(*ai, &mut carry_a);
                 *ai = negate_carry(twos_a, &mut carry_and);
             }
@@ -211,7 +211,7 @@ fn bitor_neg_pos(a: &mut [BigDigit], b: &[BigDigit]) {
     }
     debug_assert!(a.len() > b.len() || carry_a == 0);
     if a.len() > b.len() {
-        for ai in a[b.len()..].iter_mut() {
+        for ai in &mut a[b.len()..] {
             let twos_a = negate_carry(*ai, &mut carry_a);
             *ai = negate_carry(twos_a, &mut carry_or);
         }
@@ -318,7 +318,7 @@ fn bitxor_pos_neg(a: &mut Vec<BigDigit>, b: &[BigDigit]) {
     debug_assert!(b.len() > a.len() || carry_b == 0);
     match Ord::cmp(&a.len(), &b.len()) {
         Greater => {
-            for ai in a[b.len()..].iter_mut() {
+            for ai in &mut a[b.len()..] {
                 let twos_b = !0;
                 *ai = negate_carry(*ai ^ twos_b, &mut carry_xor);
             }
@@ -351,7 +351,7 @@ fn bitxor_neg_pos(a: &mut Vec<BigDigit>, b: &[BigDigit]) {
     debug_assert!(a.len() > b.len() || carry_a == 0);
     match Ord::cmp(&a.len(), &b.len()) {
         Greater => {
-            for ai in a[b.len()..].iter_mut() {
+            for ai in &mut a[b.len()..] {
                 let twos_a = negate_carry(*ai, &mut carry_a);
                 *ai = negate_carry(twos_a, &mut carry_xor);
             }
@@ -386,7 +386,7 @@ fn bitxor_neg_neg(a: &mut Vec<BigDigit>, b: &[BigDigit]) {
     debug_assert!(b.len() > a.len() || carry_b == 0);
     match Ord::cmp(&a.len(), &b.len()) {
         Greater => {
-            for ai in a[b.len()..].iter_mut() {
+            for ai in &mut a[b.len()..] {
                 let twos_a = negate_carry(*ai, &mut carry_a);
                 let twos_b = !0;
                 *ai = twos_a ^ twos_b;

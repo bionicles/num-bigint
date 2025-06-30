@@ -50,11 +50,7 @@ fn montgomery(x: &BigUint, y: &BigUint, m: &BigUint, k: BigDigit, n: usize) -> B
     // or else the result will not be properly reduced.
     assert!(
         x.data.len() == n && y.data.len() == n && m.data.len() == n,
-        "{:?} {:?} {:?} {}",
-        x,
-        y,
-        m,
-        n
+        "{x:?} {y:?} {m:?} {n}"
     );
 
     let mut z = BigUint::ZERO;
@@ -109,7 +105,7 @@ fn sub_vv(z: &mut [BigDigit], x: &[BigDigit], y: &[BigDigit]) -> BigDigit {
         let zi = xi.wrapping_sub(*yi).wrapping_sub(c);
         z[i] = zi;
         // see "Hacker's Delight", section 2-12 (overflow detection)
-        c = ((yi & !xi) | ((yi | !xi) & zi)) >> (big_digit::BITS - 1)
+        c = ((yi & !xi) | ((yi | !xi) & zi)) >> (big_digit::BITS - 1);
     }
 
     c

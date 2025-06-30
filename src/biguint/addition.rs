@@ -78,7 +78,7 @@ pub(super) fn __add2(a: &mut [BigDigit], b: &[BigDigit]) -> BigDigit {
 /// a += b
 ///
 /// The caller _must_ ensure that a is big enough to store the result - typically this means
-/// resizing a to max(a.len(), b.len()) + 1, to fit a possible carry.
+/// resizing a to `max(a.len(), b.len())` + 1, to fit a possible carry.
 pub(super) fn add2(a: &mut [BigDigit], b: &[BigDigit]) {
     let carry = __add2(a, b);
 

@@ -308,7 +308,7 @@ fn shl(b: &mut Bencher) {
         for i in 0..50 {
             m <<= i;
         }
-    })
+    });
 }
 
 #[bench]
@@ -320,7 +320,7 @@ fn shr(b: &mut Bencher) {
         for i in 0..50 {
             m >>= i;
         }
-    })
+    });
 }
 
 #[bench]
@@ -382,7 +382,7 @@ fn pow_bench_1e100000(b: &mut Bencher) {
 }
 
 /// This modulus is the prime from the 2048-bit MODP DH group:
-/// https://tools.ietf.org/html/rfc3526#section-3
+/// <https://tools.ietf.org/html/rfc3526#section-3>
 const RFC3526_2048BIT_MODP_GROUP: &str = "\
                                           FFFFFFFF_FFFFFFFF_C90FDAA2_2168C234_C4C6628B_80DC1CD1\
                                           29024E08_8A67CC74_020BBEA6_3B139B22_514A0879_8E3404DD\

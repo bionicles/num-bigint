@@ -62,7 +62,7 @@ impl BitOrAssign<&BigUint> for BigUint {
         }
         if other.data.len() > self.data.len() {
             let extra = &other.data[self.data.len()..];
-            self.data.extend(extra.iter().cloned());
+            self.data.extend(extra.iter().copied());
         }
     }
 }
@@ -86,7 +86,7 @@ impl BitXorAssign<&BigUint> for BigUint {
         }
         if other.data.len() > self.data.len() {
             let extra = &other.data[self.data.len()..];
-            self.data.extend(extra.iter().cloned());
+            self.data.extend(extra.iter().copied());
         }
         self.normalize();
     }

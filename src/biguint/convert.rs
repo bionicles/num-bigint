@@ -223,7 +223,7 @@ impl Num for BigUint {
         let mut s = s;
         if let Some(tail) = s.strip_prefix('+') {
             if !tail.starts_with('+') {
-                s = tail
+                s = tail;
             }
         }
 
@@ -307,7 +307,7 @@ fn high_bits_to_u64(v: &BigUint) -> u64 {
                     // XXX Conversion is useless if already 64-bit.
                     #[allow(clippy::useless_conversion)]
                     let masked = u64::from(*d) << (64 - (digit_bits - bits_want) as u32);
-                    ret |= (masked != 0) as u64;
+                    ret |= u64::from(masked != 0);
                 }
 
                 ret_bits += bits_want;
@@ -336,7 +336,7 @@ impl ToPrimitive for BigUint {
         let mut ret: u64 = 0;
         let mut bits = 0;
 
-        for i in self.data.iter() {
+        for i in &self.data {
             if bits >= 64 {
                 return None;
             }
@@ -354,7 +354,7 @@ impl ToPrimitive for BigUint {
         let mut ret: u128 = 0;
         let mut bits = 0;
 
-        for i in self.data.iter() {
+        for i in &self.data {
             if bits >= 128 {
                 return None;
             }
@@ -831,7 +831,7 @@ const fn generate_radix_bases(max: BigDigit) -> [(BigDigit, usize); 257] {
                 base = b;
                 power += 1;
             }
-            bases[radix as usize] = (base, power)
+            bases[radix as usize] = (base, power);
         }
         radix += 1;
     }

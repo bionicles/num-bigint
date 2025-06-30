@@ -510,8 +510,7 @@ impl Roots for BigInt {
     fn nth_root(&self, n: u32) -> Self {
         assert!(
             !(self.is_negative() && n.is_even()),
-            "root of degree {} is imaginary",
-            n
+            "root of degree {n} is imaginary"
         );
 
         BigInt::from_biguint(self.sign, self.data.nth_root(n))
@@ -554,9 +553,10 @@ impl IntDigits for BigInt {
     }
 }
 
-/// A generic trait for converting a value to a [`BigInt`]. This may return
-/// `None` when converting from `f32` or `f64`, and will always succeed
-/// when converting from any integer or unsigned primitive, or [`BigUint`].
+/// A generic trait for converting a value to a [`BigInt`].
+///
+/// This may return `None` when converting from `f32` or `f64`, and
+/// will always succeed when converting from any integer or unsigned primitive, or [`BigUint`].
 pub trait ToBigInt {
     /// Converts the value of `self` to a [`BigInt`].
     fn to_bigint(&self) -> Option<BigInt>;

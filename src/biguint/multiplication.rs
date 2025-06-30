@@ -424,7 +424,7 @@ fn scalar_mul(a: &mut BigUint, b: BigDigit) {
                 *a <<= b.trailing_zeros();
             } else {
                 let mut carry = 0;
-                for a in a.data.iter_mut() {
+                for a in &mut a.data {
                     *a = mul_with_carry(*a, b, &mut carry);
                 }
                 if carry != 0 {

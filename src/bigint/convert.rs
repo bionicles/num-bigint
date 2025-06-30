@@ -27,7 +27,7 @@ impl Num for BigInt {
     fn from_str_radix(mut s: &str, radix: u32) -> Result<BigInt, ParseBigIntError> {
         let sign = if let Some(tail) = s.strip_prefix('-') {
             if !tail.starts_with('+') {
-                s = tail
+                s = tail;
             }
             Minus
         } else {
@@ -409,7 +409,7 @@ pub(super) fn from_signed_bytes_le(digits: &[u8]) -> BigInt {
 #[inline]
 pub(super) fn to_signed_bytes_be(x: &BigInt) -> Vec<u8> {
     let mut bytes = x.data.to_bytes_be();
-    let first_byte = bytes.first().cloned().unwrap_or(0);
+    let first_byte = bytes.first().copied().unwrap_or(0);
     if first_byte > 0x7f
         && !(first_byte == 0x80 && bytes.iter().skip(1).all(Zero::is_zero) && x.sign == Sign::Minus)
     {
@@ -425,7 +425,7 @@ pub(super) fn to_signed_bytes_be(x: &BigInt) -> Vec<u8> {
 #[inline]
 pub(super) fn to_signed_bytes_le(x: &BigInt) -> Vec<u8> {
     let mut bytes = x.data.to_bytes_le();
-    let last_byte = bytes.last().cloned().unwrap_or(0);
+    let last_byte = bytes.last().copied().unwrap_or(0);
     if last_byte > 0x7f
         && !(last_byte == 0x80
             && bytes.iter().rev().skip(1).all(Zero::is_zero)
@@ -444,14 +444,14 @@ pub(super) fn to_signed_bytes_le(x: &BigInt) -> Vec<u8> {
 /// in little-endian byte order.
 #[inline]
 fn twos_complement_le(digits: &mut [u8]) {
-    twos_complement(digits)
+    twos_complement(digits);
 }
 
 /// Perform in-place two's complement of the given binary representation
 /// in big-endian byte order.
 #[inline]
 fn twos_complement_be(digits: &mut [u8]) {
-    twos_complement(digits.iter_mut().rev())
+    twos_complement(digits.iter_mut().rev());
 }
 
 /// Perform in-place two's complement of the given digit iterator

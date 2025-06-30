@@ -28,7 +28,7 @@ impl RngCore for XorShiftStar {
         for chunk in dest.chunks_mut(8) {
             let bytes = self.next_u64().to_le_bytes();
             let slice = &bytes[..chunk.len()];
-            chunk.copy_from_slice(slice)
+            chunk.copy_from_slice(slice);
         }
     }
 

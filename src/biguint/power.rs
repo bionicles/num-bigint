@@ -232,9 +232,9 @@ fn test_plain_modpow() {
         two.pow(0b10_00000000_u32) % &modulus,
         plain_modpow(two, &exp, &modulus)
     );
-    let exp = vec![0, 0b110010];
+    let exp = vec![0, 0b11_0010];
     assert_eq!(
-        two.pow(0b110010_00000000_u32) % &modulus,
+        two.pow(0b11_0010_0000_0000_u32) % &modulus,
         plain_modpow(two, &exp, &modulus)
     );
     let exp = vec![0b1, 0b1];

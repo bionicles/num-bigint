@@ -10,9 +10,7 @@ use num_traits::{PrimInt, Zero};
 
 #[inline]
 fn biguint_shl<T: PrimInt>(n: Cow<'_, BigUint>, shift: T) -> BigUint {
-    if shift < T::zero() {
-        panic!("attempt to shift left with negative");
-    }
+    assert!((shift >= T::zero()), "attempt to shift left with negative");
     if n.is_zero() {
         return n.into_owned();
     }
