@@ -1330,7 +1330,7 @@ fn test_iter_product() {
 #[test]
 fn test_iter_sum_generic() {
     let result: BigInt = FromPrimitive::from_isize(-1_234_567).unwrap();
-    let data = vec![-1_000_000, 200_000, -30000, -4000, -500, -60, -7];
+    let data = vec![-1_000_000, -200_000, -30000, -4000, -500, -60, -7];
 
     assert_eq!(result, data.iter().sum::<BigInt>());
     assert_eq!(result, data.into_iter().sum::<BigInt>());
