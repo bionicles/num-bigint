@@ -621,7 +621,7 @@ fn test_convert_f32() {
     check(&(BigUint::from((1u64 << 24) - 1) << (128 - 24)), f32::MAX);
 
     // keeping all 24 digits with the bits at different offsets to the BigDigits
-    let x: u32 = 0b00000000101111011111011011011101;
+    let x: u32 = 0b0000_0000_1011_1101_1111_0110_1101_1101;
     let mut f = x as f32;
     let mut b = BigUint::from(x);
     for _ in 0..64 {
@@ -631,7 +631,7 @@ fn test_convert_f32() {
     }
 
     // this number when rounded to f64 then f32 isn't the same as when rounded straight to f32
-    let n: u64 = 0b0000000000111111111111111111111111011111111111111111111111111111;
+    let n: u64 = 0b0000_0000_0011_1111_1111_1111_1111_1111_1101_1111_1111_1111_1111_1111_1111_1111;
     assert!((n as f64) as f32 != n as f32);
     assert_eq!(BigUint::from(n).to_f32(), Some(n as f32));
 
@@ -709,7 +709,7 @@ fn test_convert_f64() {
     check(&(BigUint::from((1u64 << 53) - 1) << (1024 - 53)), f64::MAX);
 
     // keeping all 53 digits with the bits at different offsets to the BigDigits
-    let x: u64 = 0b0000000000011110111110110111111101110111101111011111011011011101;
+    let x: u64 = 0b0000_0000_0001_1110_1111_1011_0111_1111_0111_0111_1011_1101_1111_0110_1101_1101;
     let mut f = x as f64;
     let mut b = BigUint::from(x);
     for _ in 0..128 {
@@ -794,8 +794,8 @@ fn test_convert_from_uint() {
         };
     }
 
-    check!(u8, BigUint::from_slice(&[u8::MAX as u32]));
-    check!(u16, BigUint::from_slice(&[u16::MAX as u32]));
+    check!(u8, BigUint::from_slice(&[u32::from(u8::MAX)]));
+    check!(u16, BigUint::from_slice(&[u32::from(u16::MAX)]));
     check!(u32, BigUint::from_slice(&[u32::MAX]));
     check!(u64, BigUint::from_slice(&[u32::MAX, u32::MAX]));
     check!(
@@ -807,7 +807,7 @@ fn test_convert_from_uint() {
 
 #[test]
 fn test_add() {
-    for elm in SUM_TRIPLES.iter() {
+    for elm in SUM_TRIPLES {
         let (a_vec, b_vec, c_vec) = *elm;
         let a = BigUint::from_slice(a_vec);
         let b = BigUint::from_slice(b_vec);
@@ -822,7 +822,7 @@ fn test_add() {
 
 #[test]
 fn test_sub() {
-    for elm in SUM_TRIPLES.iter() {
+    for elm in SUM_TRIPLES {
         let (a_vec, b_vec, c_vec) = *elm;
         let a = BigUint::from_slice(a_vec);
         let b = BigUint::from_slice(b_vec);
@@ -844,7 +844,7 @@ fn test_sub_fail_on_underflow() {
 
 #[test]
 fn test_mul() {
-    for elm in MUL_TRIPLES.iter() {
+    for elm in MUL_TRIPLES {
         let (a_vec, b_vec, c_vec) = *elm;
         let a = BigUint::from_slice(a_vec);
         let b = BigUint::from_slice(b_vec);
@@ -856,7 +856,7 @@ fn test_mul() {
         assert_assign_op!(b *= a == c);
     }
 
-    for elm in DIV_REM_QUADRUPLES.iter() {
+    for elm in DIV_REM_QUADRUPLES {
         let (a_vec, b_vec, c_vec, d_vec) = *elm;
         let a = BigUint::from_slice(a_vec);
         let b = BigUint::from_slice(b_vec);
@@ -870,7 +870,7 @@ fn test_mul() {
 
 #[test]
 fn test_div_rem() {
-    for elm in MUL_TRIPLES.iter() {
+    for elm in MUL_TRIPLES {
         let (a_vec, b_vec, c_vec) = *elm;
         let a = BigUint::from_slice(a_vec);
         let b = BigUint::from_slice(b_vec);
@@ -892,7 +892,7 @@ fn test_div_rem() {
         }
     }
 
-    for elm in DIV_REM_QUADRUPLES.iter() {
+    for elm in DIV_REM_QUADRUPLES {
         let (a_vec, b_vec, c_vec, d_vec) = *elm;
         let a = BigUint::from_slice(a_vec);
         let b = BigUint::from_slice(b_vec);
@@ -933,7 +933,7 @@ fn test_div_ceil() {
         }
     }
 
-    for elm in MUL_TRIPLES.iter() {
+    for elm in MUL_TRIPLES {
         let (a_vec, b_vec, c_vec) = *elm;
         let a = BigUint::from_slice(a_vec);
         let b = BigUint::from_slice(b_vec);
@@ -947,7 +947,7 @@ fn test_div_ceil() {
         }
     }
 
-    for elm in DIV_REM_QUADRUPLES.iter() {
+    for elm in DIV_REM_QUADRUPLES {
         let (a_vec, b_vec, c_vec, d_vec) = *elm;
         let a = BigUint::from_slice(a_vec);
         let b = BigUint::from_slice(b_vec);
@@ -967,7 +967,7 @@ fn test_div_rem_euclid() {
         assert_eq!(a.rem_euclid(b), *m);
     }
 
-    for elm in MUL_TRIPLES.iter() {
+    for elm in MUL_TRIPLES {
         let (a_vec, b_vec, c_vec) = *elm;
         let a = BigUint::from_slice(a_vec);
         let b = BigUint::from_slice(b_vec);
@@ -981,7 +981,7 @@ fn test_div_rem_euclid() {
         }
     }
 
-    for elm in DIV_REM_QUADRUPLES.iter() {
+    for elm in DIV_REM_QUADRUPLES {
         let (a_vec, b_vec, c_vec, d_vec) = *elm;
         let a = BigUint::from_slice(a_vec);
         let b = BigUint::from_slice(b_vec);
@@ -996,7 +996,7 @@ fn test_div_rem_euclid() {
 
 #[test]
 fn test_checked_add() {
-    for elm in SUM_TRIPLES.iter() {
+    for elm in SUM_TRIPLES {
         let (a_vec, b_vec, c_vec) = *elm;
         let a = BigUint::from_slice(a_vec);
         let b = BigUint::from_slice(b_vec);
@@ -1009,7 +1009,7 @@ fn test_checked_add() {
 
 #[test]
 fn test_checked_sub() {
-    for elm in SUM_TRIPLES.iter() {
+    for elm in SUM_TRIPLES {
         let (a_vec, b_vec, c_vec) = *elm;
         let a = BigUint::from_slice(a_vec);
         let b = BigUint::from_slice(b_vec);
@@ -1029,7 +1029,7 @@ fn test_checked_sub() {
 
 #[test]
 fn test_checked_mul() {
-    for elm in MUL_TRIPLES.iter() {
+    for elm in MUL_TRIPLES {
         let (a_vec, b_vec, c_vec) = *elm;
         let a = BigUint::from_slice(a_vec);
         let b = BigUint::from_slice(b_vec);
@@ -1039,7 +1039,7 @@ fn test_checked_mul() {
         assert!(b.checked_mul(&a).unwrap() == c);
     }
 
-    for elm in DIV_REM_QUADRUPLES.iter() {
+    for elm in DIV_REM_QUADRUPLES {
         let (a_vec, b_vec, c_vec, d_vec) = *elm;
         let a = BigUint::from_slice(a_vec);
         let b = BigUint::from_slice(b_vec);
@@ -1076,7 +1076,7 @@ fn test_mul_overflow_2() {
 
 #[test]
 fn test_checked_div() {
-    for elm in MUL_TRIPLES.iter() {
+    for elm in MUL_TRIPLES {
         let (a_vec, b_vec, c_vec) = *elm;
         let a = BigUint::from_slice(a_vec);
         let b = BigUint::from_slice(b_vec);
@@ -1284,9 +1284,9 @@ fn to_str_pairs() -> Vec<(BigUint, Vec<(u32, String)>)> {
 #[test]
 fn test_to_str_radix() {
     let r = to_str_pairs();
-    for num_pair in r.iter() {
+    for num_pair in r {
         let (n, rs) = num_pair;
-        for str_pair in rs.iter() {
+        for str_pair in &rs {
             let (radix, str) = str_pair;
             assert_eq!(n.to_str_radix(*radix), *str);
         }
@@ -1674,9 +1674,9 @@ fn test_lower_hex() {
     let a = BigUint::parse_bytes(b"A", 16).unwrap();
     let hello = BigUint::parse_bytes(b"22405534230753963835153736737", 10).unwrap();
 
-    assert_eq!(format!("{:x}", a), "a");
-    assert_eq!(format!("{:x}", hello), "48656c6c6f20776f726c6421");
-    assert_eq!(format!("{:♥>+#8x}", a), "♥♥♥♥+0xa");
+    assert_eq!(format!("{a:x}"), "a");
+    assert_eq!(format!("{hello:x}"), "48656c6c6f20776f726c6421");
+    assert_eq!(format!("{a:♥>+#8x}"), "♥♥♥♥+0xa");
 }
 
 #[test]
@@ -1684,9 +1684,9 @@ fn test_upper_hex() {
     let a = BigUint::parse_bytes(b"A", 16).unwrap();
     let hello = BigUint::parse_bytes(b"22405534230753963835153736737", 10).unwrap();
 
-    assert_eq!(format!("{:X}", a), "A");
-    assert_eq!(format!("{:X}", hello), "48656C6C6F20776F726C6421");
-    assert_eq!(format!("{:♥>+#8X}", a), "♥♥♥♥+0xA");
+    assert_eq!(format!("{a:X}"), "A");
+    assert_eq!(format!("{hello:X}"), "48656C6C6F20776F726C6421");
+    assert_eq!(format!("{a:♥>+#8X}"), "♥♥♥♥+0xA");
 }
 
 #[test]
@@ -1694,12 +1694,12 @@ fn test_binary() {
     let a = BigUint::parse_bytes(b"A", 16).unwrap();
     let hello = BigUint::parse_bytes(b"224055342307539", 10).unwrap();
 
-    assert_eq!(format!("{:b}", a), "1010");
+    assert_eq!(format!("{a:b}"), "1010");
     assert_eq!(
-        format!("{:b}", hello),
+        format!("{hello:b}"),
         "110010111100011011110011000101101001100011010011"
     );
-    assert_eq!(format!("{:♥>+#8b}", a), "♥+0b1010");
+    assert_eq!(format!("{a:♥>+#8b}"), "♥+0b1010");
 }
 
 #[test]
@@ -1707,9 +1707,9 @@ fn test_octal() {
     let a = BigUint::parse_bytes(b"A", 16).unwrap();
     let hello = BigUint::parse_bytes(b"22405534230753963835153736737", 10).unwrap();
 
-    assert_eq!(format!("{:o}", a), "12");
-    assert_eq!(format!("{:o}", hello), "22062554330674403566756233062041");
-    assert_eq!(format!("{:♥>+#8o}", a), "♥♥♥+0o12");
+    assert_eq!(format!("{a:o}"), "12");
+    assert_eq!(format!("{hello:o}"), "22062554330674403566756233062041");
+    assert_eq!(format!("{a:♥>+#8o}"), "♥♥♥+0o12");
 }
 
 #[test]
@@ -1717,9 +1717,9 @@ fn test_display() {
     let a = BigUint::parse_bytes(b"A", 16).unwrap();
     let hello = BigUint::parse_bytes(b"22405534230753963835153736737", 10).unwrap();
 
-    assert_eq!(format!("{}", a), "10");
-    assert_eq!(format!("{}", hello), "22405534230753963835153736737");
-    assert_eq!(format!("{:♥>+#8}", a), "♥♥♥♥♥+10");
+    assert_eq!(format!("{a}"), "10");
+    assert_eq!(format!("{hello}"), "22405534230753963835153736737");
+    assert_eq!(format!("{a:♥>+#8}"), "♥♥♥♥♥+10");
 }
 
 #[test]
@@ -1764,10 +1764,10 @@ fn test_bits() {
 
 #[test]
 fn test_iter_sum() {
-    let result: BigUint = FromPrimitive::from_isize(1234567).unwrap();
+    let result: BigUint = FromPrimitive::from_isize(1_234_567).unwrap();
     let data: Vec<BigUint> = vec![
-        FromPrimitive::from_u32(1000000).unwrap(),
-        FromPrimitive::from_u32(200000).unwrap(),
+        FromPrimitive::from_u32(1_000_000).unwrap(),
+        FromPrimitive::from_u32(200_000).unwrap(),
         FromPrimitive::from_u32(30000).unwrap(),
         FromPrimitive::from_u32(4000).unwrap(),
         FromPrimitive::from_u32(500).unwrap(),

@@ -342,7 +342,9 @@ fn pow_bench(b: &mut Bencher) {
         for _i in 2..=upper {
             i_big += 1u32;
             for j in 2..=upper {
-                i_big.pow(j);
+                let x = i_big.pow(j);
+                // added black box to prevent the compiler from optimizing out the pow
+                std::hint::black_box(&x);
             }
         }
     });

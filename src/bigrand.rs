@@ -7,7 +7,7 @@ use rand::prelude::*;
 
 use crate::BigInt;
 use crate::BigUint;
-use crate::Sign::*;
+use crate::Sign::{Minus, NoSign, Plus};
 
 use crate::biguint::biguint_from_vec;
 
@@ -21,7 +21,7 @@ pub trait RandBigInt {
     /// Generate a random [`BigUint`] of the given bit size.
     fn random_biguint(&mut self, bit_size: u64) -> BigUint;
 
-    /// Generate a random [ BigInt`] of the given bit size.
+    /// Generate a random [`BigInt`] of the given bit size.
     fn random_bigint(&mut self, bit_size: u64) -> BigInt;
 
     /// Generate a random [`BigUint`] less than the given bound. Fails
@@ -64,7 +64,7 @@ impl<R: RngCore + ?Sized> RandBigInt for R {
             use core::slice;
 
             let (digits, rem) = bit_size.div_rem(&32);
-            let len = (digits + (rem > 0) as u64)
+            let len = (digits + u64::from(rem > 0))
                 .to_usize()
                 .expect("capacity overflow");
             let native_digits = Integer::div_ceil(&bit_size, &64);
@@ -72,7 +72,7 @@ impl<R: RngCore + ?Sized> RandBigInt for R {
             let mut data = vec![0u64; native_len];
             unsafe {
                 // Generate bits in a `&mut [u32]` slice for value stability
-                let ptr = data.as_mut_ptr() as *mut u32;
+                let ptr = data.as_mut_ptr().cast::<u32>();
                 debug_assert!(native_len * 2 >= len);
                 let data = slice::from_raw_parts_mut(ptr, len);
                 random_bits(self, data, rem);
@@ -98,9 +98,8 @@ impl<R: RngCore + ?Sized> RandBigInt for R {
                 // double that of any other number.
                 if self.random() {
                     continue;
-                } else {
-                    NoSign
                 }
+                NoSign
             } else if self.random() {
                 Plus
             } else {
@@ -162,7 +161,7 @@ impl UniformSampler for UniformBigUint {
         let low = low_b.borrow();
         let high = high_b.borrow();
         if low < high {
-            Ok(UniformBigUint {
+            Ok(Self {
                 len: high - low,
                 base: low.clone(),
             })
@@ -228,7 +227,7 @@ impl UniformSampler for UniformBigInt {
         let low = low_b.borrow();
         let high = high_b.borrow();
         if low < high {
-            Ok(UniformBigInt {
+            Ok(Self {
                 len: (high - low).into_parts().1,
                 base: low.clone(),
             })
@@ -284,9 +283,10 @@ pub struct RandomBits {
 }
 
 impl RandomBits {
+    #[must_use]
     #[inline]
-    pub fn new(bits: u64) -> RandomBits {
-        RandomBits { bits }
+    pub const fn new(bits: u64) -> Self {
+        Self { bits }
     }
 }
 
