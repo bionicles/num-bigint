@@ -1,5 +1,5 @@
 #![feature(test)]
-#![cfg(feature = "rand")]
+#![cfg(feature = "rand_core")]
 
 extern crate test;
 
